@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>New Receipt · Receipts</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="hsl(217, 95%, 60%)" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+  <div class="topbar">
+    <a class="brand" href="index.html">Receipt<span>s</span></a>
+  </div>
+
+  <form id="receiptForm">
+    <fieldset class="glass-card">
+      <legend>Your info</legend>
+      <label for="myRole">I am the</label>
+      <select id="myRole">
+        <option value="Provider">Provider (I'm selling / providing)</option>
+        <option value="Client">Client (I'm buying)</option>
+      </select>
+      <label for="issuerName">Your name</label>
+      <input id="issuerName" required />
+      <label for="issuerEmail">Your email</label>
+      <input id="issuerEmail" type="email" required />
+    </fieldset>
+
+    <fieldset class="glass-card">
+      <legend>Other party</legend>
+      <label for="counterName">Their name</label>
+      <input id="counterName" required />
+      <label for="counterEmail">Their email</label>
+      <input id="counterEmail" type="email" />
+    </fieldset>
+
+    <div class="glass-card">
+      <h3>Items</h3>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th class="col-desc">Description</th>
+            <th class="col-qty">Qty</th>
+            <th class="col-price">Unit price</th>
+            <th class="col-total">Line total</th>
+            <th class="col-remove"></th>
+          </tr>
+        </thead>
+        <tbody id="itemRows"></tbody>
+      </table>
+      <button type="button" id="addItemBtn" class="btn btn-outline btn-sm">+ Add item</button>
+
+      <div class="totals-row">
+        <span>Total</span>
+        <span class="grand" id="grandTotal">$0.00</span>
+      </div>
+    </div>
+
+    <fieldset class="glass-card">
+      <legend>Notes</legend>
+      <textarea id="notes" rows="3" placeholder="Optional"></textarea>
+    </fieldset>
+
+    <div class="form-actions">
+      <a class="btn btn-outline" href="index.html">Cancel</a>
+      <button type="submit" class="btn btn-primary">Generate Receipt</button>
+    </div>
+  </form>
+</div>
+
+<template id="itemRowTemplate">
+  <tr class="item-row">
+    <td class="col-desc"><input class="item-desc" required /></td>
+    <td class="col-qty"><input class="item-qty" type="number" min="0" step="1" value="1" required /></td>
+    <td class="col-price"><input class="item-price" type="number" min="0" step="0.01" value="0" required /></td>
+    <td class="col-total item-line-total">$0.00</td>
+    <td class="col-remove"><button type="button" class="remove-row" title="Remove item">&times;</button></td>
+  </tr>
+</template>
+
+<script src="storage.js"></script>
+<script src="calc.js"></script>
+<script src="pwa.js"></script>
+<script src="form.js"></script>
+</body>
+</html>
