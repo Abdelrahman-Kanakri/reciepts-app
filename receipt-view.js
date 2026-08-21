@@ -10,8 +10,9 @@
     var editLink = document.getElementById('editLink');
     var id = getQueryParam('id');
     var receipt = id ? ReceiptStorage.getReceipt(id) : undefined;
+    var isWellFormed = receipt && receipt.issuer && receipt.counterparty && Array.isArray(receipt.items);
 
-    if (!receipt) {
+    if (!isWellFormed) {
       container.innerHTML = '<div class="not-found"><p>Receipt not found.</p><a class="btn btn-outline" href="index.html">Back to History</a></div>';
       editLink.style.display = 'none';
       return;
