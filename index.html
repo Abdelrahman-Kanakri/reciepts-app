@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Receipts</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="hsl(217, 95%, 60%)" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+  <div class="topbar">
+    <span class="brand">Receipt<span>s</span></span>
+    <a class="btn btn-primary" href="new.html">+ New Receipt</a>
+  </div>
+
+  <div id="historyList"></div>
+  <div id="emptyState" class="empty-state glass-card" hidden>
+    <p>No receipts yet.</p>
+    <a class="btn btn-outline" href="new.html">Create your first receipt</a>
+  </div>
+</div>
+
+<script src="storage.js"></script>
+<script src="calc.js"></script>
+<script src="pwa.js"></script>
+<script src="history.js"></script>
+</body>
+</html>
