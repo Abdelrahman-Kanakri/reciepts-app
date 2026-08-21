@@ -29,23 +29,26 @@
     node.querySelector('.issuer-role-label').textContent = receipt.issuer.role;
     node.querySelector('.issuer-name').textContent = receipt.issuer.name;
     node.querySelector('.issuer-email').textContent = receipt.issuer.email;
+    node.querySelector('.issuer-phone').textContent = receipt.issuer.phone || '';
 
     node.querySelector('.counter-role-label').textContent = receipt.counterparty.role;
     node.querySelector('.counter-name').textContent = receipt.counterparty.name;
     node.querySelector('.counter-email').textContent = receipt.counterparty.email;
+    node.querySelector('.counter-phone').textContent = receipt.counterparty.phone || '';
 
+    var currency = receipt.currency || ReceiptCalc.DEFAULT_CURRENCY;
     var itemsBody = node.querySelector('.items-body');
     receipt.items.forEach(function (item) {
       var row = document.createElement('tr');
       row.innerHTML = '<td></td><td class="num"></td><td class="num"></td><td class="num"></td>';
       row.children[0].textContent = item.description;
       row.children[1].textContent = item.qty;
-      row.children[2].textContent = ReceiptCalc.formatCurrency(item.unitPrice);
-      row.children[3].textContent = ReceiptCalc.formatCurrency(ReceiptCalc.lineTotal(item.qty, item.unitPrice));
+      row.children[2].textContent = ReceiptCalc.formatCurrency(item.unitPrice, currency);
+      row.children[3].textContent = ReceiptCalc.formatCurrency(ReceiptCalc.lineTotal(item.qty, item.unitPrice, currency), currency);
       itemsBody.appendChild(row);
     });
 
-    node.querySelector('.r-total').textContent = 'Total ' + ReceiptCalc.formatCurrency(receipt.total);
+    node.querySelector('.r-total').textContent = 'Total ' + ReceiptCalc.formatCurrency(receipt.total, currency);
 
     var notesEl = node.querySelector('.r-notes');
     if (receipt.notes) {

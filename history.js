@@ -31,7 +31,7 @@
       info.appendChild(el('div', 'meta', receipt.receiptNumber + ' · ' + receipt.date));
       card.appendChild(info);
 
-      card.appendChild(el('div', 'amount', ReceiptCalc.formatCurrency(receipt.total)));
+      card.appendChild(el('div', 'amount', ReceiptCalc.formatCurrency(receipt.total, receipt.currency || ReceiptCalc.DEFAULT_CURRENCY)));
 
       var actions = el('div', 'history-actions');
 

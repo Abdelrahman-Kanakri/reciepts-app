@@ -3,6 +3,7 @@
 
   var RECEIPTS_KEY = 'receipts';
   var LAST_ISSUER_KEY = 'lastIssuer';
+  var LAST_CURRENCY_KEY = 'lastCurrency';
   var COUNTER_KEY = 'receiptCounter';
 
   function generateId() {
@@ -71,6 +72,16 @@
     writeJSON(store, LAST_ISSUER_KEY, issuer);
   }
 
+  function getLastCurrency(store) {
+    store = store || global.localStorage;
+    return readJSON(store, LAST_CURRENCY_KEY, null);
+  }
+
+  function setLastCurrency(currencyCode, store) {
+    store = store || global.localStorage;
+    writeJSON(store, LAST_CURRENCY_KEY, currencyCode);
+  }
+
   function nextReceiptNumber(store) {
     store = store || global.localStorage;
     var counter = readJSON(store, COUNTER_KEY, 0) + 1;
@@ -88,6 +99,8 @@
     deleteReceipt: deleteReceipt,
     getLastIssuer: getLastIssuer,
     setLastIssuer: setLastIssuer,
+    getLastCurrency: getLastCurrency,
+    setLastCurrency: setLastCurrency,
     nextReceiptNumber: nextReceiptNumber
   };
 

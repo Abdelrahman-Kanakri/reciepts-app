@@ -60,6 +60,13 @@ test('getLastIssuer defaults to null, setLastIssuer round-trips', () => {
   assert.deepEqual(ReceiptStorage.getLastIssuer(store), { name: 'Abdelrahman', email: 'a@example.com' });
 });
 
+test('getLastCurrency defaults to null, setLastCurrency round-trips', () => {
+  const store = makeFakeStore();
+  assert.equal(ReceiptStorage.getLastCurrency(store), null);
+  ReceiptStorage.setLastCurrency('JOD', store);
+  assert.equal(ReceiptStorage.getLastCurrency(store), 'JOD');
+});
+
 test('nextReceiptNumber increments and formats with the current year', () => {
   const store = makeFakeStore();
   const year = new Date().getFullYear();

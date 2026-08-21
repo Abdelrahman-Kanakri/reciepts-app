@@ -29,7 +29,9 @@
       <label for="issuerName">Your name</label>
       <input id="issuerName" required />
       <label for="issuerEmail">Your email</label>
-      <input id="issuerEmail" type="email" required />
+      <input id="issuerEmail" type="email" />
+      <label for="issuerPhone">Your phone</label>
+      <input id="issuerPhone" type="tel" />
     </fieldset>
 
     <fieldset class="glass-card">
@@ -38,10 +40,21 @@
       <input id="counterName" required />
       <label for="counterEmail">Their email</label>
       <input id="counterEmail" type="email" />
+      <label for="counterPhone">Their phone</label>
+      <input id="counterPhone" type="tel" />
     </fieldset>
 
     <div class="glass-card">
       <h3>Items</h3>
+      <label for="currency">Currency</label>
+      <select id="currency">
+        <option value="USD">USD ($)</option>
+        <option value="JOD">JOD (JD)</option>
+        <option value="AED">AED</option>
+        <option value="EUR">EUR (€)</option>
+        <option value="GBP">GBP (£)</option>
+        <option value="SAR">SAR</option>
+      </select>
       <table class="items-table">
         <thead>
           <tr>

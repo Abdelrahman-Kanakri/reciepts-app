@@ -1,7 +1,17 @@
 (function () {
   'use strict';
 
-  var itemRowsEl, grandTotalEl, addItemBtn, form, myRoleSelect;
+  var itemRowsEl, grandTotalEl, addItemBtn, form, myRoleSelect, currencySelect;
+
+  function currentCurrency() {
+    return currencySelect.value;
+  }
+
+  function priceStep() {
+    var code = currentCurrency();
+    var decimals = (ReceiptCalc.CURRENCIES[code] || ReceiptCalc.CURRENCIES[ReceiptCalc.DEFAULT_CURRENCY]).decimals;
+    return (1 / Math.pow(10, decimals)).toString();
+  }
 
   function getQueryParam(name) {
     return new URLSearchParams(window.location.search).get(name);
@@ -14,6 +24,7 @@
     var descInput = row.querySelector('.item-desc');
     var qtyInput = row.querySelector('.item-qty');
     var priceInput = row.querySelector('.item-price');
+    priceInput.step = priceStep();
 
     if (item) {
       descInput.value = item.description || '';
@@ -39,11 +50,20 @@
   function updateLineTotal(row) {
     var qty = Number(row.querySelector('.item-qty').value) || 0;
     var price = Number(row.querySelector('.item-price').value) || 0;
-    row.querySelector('.item-line-total').textContent = ReceiptCalc.formatCurrency(ReceiptCalc.lineTotal(qty, price));
+    row.querySelector('.item-line-total').textContent = ReceiptCalc.formatCurrency(ReceiptCalc.lineTotal(qty, price, currentCurrency()), currentCurrency());
   }
 
   function recalcTotal() {
-    grandTotalEl.textContent = ReceiptCalc.formatCurrency(ReceiptCalc.computeTotal(collectItems()));
+    grandTotalEl.textContent = ReceiptCalc.formatCurrency(ReceiptCalc.computeTotal(collectItems(), currentCurrency()), currentCurrency());
+  }
+
+  function refreshAllLineTotals() {
+    var step = priceStep();
+    itemRowsEl.querySelectorAll('.item-row').forEach(function (row) {
+      row.querySelector('.item-price').step = step;
+      updateLineTotal(row);
+    });
+    recalcTotal();
   }
 
   function collectItems() {
@@ -64,6 +84,11 @@
     if (lastIssuer) {
       document.getElementById('issuerName').value = lastIssuer.name || '';
       document.getElementById('issuerEmail').value = lastIssuer.email || '';
+      document.getElementById('issuerPhone').value = lastIssuer.phone || '';
+    }
+    var lastCurrency = ReceiptStorage.getLastCurrency();
+    if (lastCurrency) {
+      currencySelect.value = lastCurrency;
     }
   }
 
@@ -73,9 +98,12 @@
     myRoleSelect.value = receipt.issuer.role;
     document.getElementById('issuerName').value = receipt.issuer.name;
     document.getElementById('issuerEmail').value = receipt.issuer.email;
+    document.getElementById('issuerPhone').value = receipt.issuer.phone || '';
     document.getElementById('counterName').value = receipt.counterparty.name;
     document.getElementById('counterEmail').value = receipt.counterparty.email;
+    document.getElementById('counterPhone').value = receipt.counterparty.phone || '';
     document.getElementById('notes').value = receipt.notes || '';
+    currencySelect.value = receipt.currency || ReceiptCalc.DEFAULT_CURRENCY;
     itemRowsEl.innerHTML = '';
     receipt.items.forEach(addItemRow);
     recalcTotal();
@@ -95,14 +123,17 @@
     var issuer = {
       name: document.getElementById('issuerName').value,
       email: document.getElementById('issuerEmail').value,
+      phone: document.getElementById('issuerPhone').value,
       role: myRole
     };
     var counterparty = {
       name: document.getElementById('counterName').value,
       email: document.getElementById('counterEmail').value,
+      phone: document.getElementById('counterPhone').value,
       role: counterRole
     };
 
+    var currency = currentCurrency();
     var receipt = {
       id: ReceiptStorage.generateId(),
       receiptNumber: ReceiptStorage.nextReceiptNumber(),
@@ -111,11 +142,13 @@
       counterparty: counterparty,
       items: items,
       notes: document.getElementById('notes').value,
-      total: ReceiptCalc.computeTotal(items)
+      currency: currency,
+      total: ReceiptCalc.computeTotal(items, currency)
     };
 
     ReceiptStorage.saveReceipt(receipt);
-    ReceiptStorage.setLastIssuer({ name: issuer.name, email: issuer.email });
+    ReceiptStorage.setLastIssuer({ name: issuer.name, email: issuer.email, phone: issuer.phone });
+    ReceiptStorage.setLastCurrency(currency);
 
     window.location.href = 'receipt.html?id=' + encodeURIComponent(receipt.id);
   }
@@ -126,9 +159,11 @@
     addItemBtn = document.getElementById('addItemBtn');
     form = document.getElementById('receiptForm');
     myRoleSelect = document.getElementById('myRole');
+    currencySelect = document.getElementById('currency');
 
     addItemBtn.addEventListener('click', function () { addItemRow(); recalcTotal(); });
     form.addEventListener('submit', handleSubmit);
+    currencySelect.addEventListener('change', refreshAllLineTotals);
 
     prefillFromLastIssuer();
 

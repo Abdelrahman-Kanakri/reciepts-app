@@ -1,7 +1,7 @@
 'use strict';
 
 // Bump this whenever a cached file changes, or installed/offline clients keep the old version.
-var CACHE_NAME = 'receipts-cache-v1';
+var CACHE_NAME = 'receipts-cache-v2';
 var ASSETS = [
   './',
   'index.html',
