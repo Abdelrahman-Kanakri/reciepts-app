@@ -1,5 +1,6 @@
 'use strict';
 
+// Bump this whenever a cached file changes, or installed/offline clients keep the old version.
 var CACHE_NAME = 'receipts-cache-v1';
 var ASSETS = [
   './',
@@ -43,14 +44,15 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
   if (event.request.method !== 'GET') return;
+  if (new URL(event.request.url).origin !== self.location.origin) return;
   event.respondWith(
     caches.match(event.request).then(function (cached) {
       return cached || fetch(event.request).then(function (response) {
         var copy = response.clone();
-        caches.open(CACHE_NAME).then(function (cache) {
+        return caches.open(CACHE_NAME).then(function (cache) {
           cache.put(event.request, copy);
+          return response;
         });
-        return response;
       }).catch(function () {
         return cached;
       });
