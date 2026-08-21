@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Receipt · Receipts</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="hsl(217, 95%, 60%)" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="receipt.css" />
+</head>
+<body>
+<div class="receipt-shell">
+  <div class="actions">
+    <a class="btn btn-outline" href="index.html">&larr; Back to History</a>
+    <div style="display:flex; gap:0.75rem;">
+      <a class="btn btn-outline" id="editLink" href="#">Edit / Duplicate</a>
+      <button class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <div id="receiptContainer"></div>
+</div>
+
+<template id="receiptTemplate">
+  <div class="receipt-paper">
+    <div class="receipt-header">
+      <h1>Receipt</h1>
+      <div class="meta">
+        <div class="r-number"></div>
+        <div class="r-date"></div>
+      </div>
+    </div>
+    <div class="receipt-body">
+      <div class="parties">
+        <div class="party">
+          <h3 class="issuer-role-label"></h3>
+          <div class="name issuer-name"></div>
+          <div class="email issuer-email"></div>
+        </div>
+        <div class="party">
+          <h3 class="counter-role-label"></h3>
+          <div class="name counter-name"></div>
+          <div class="email counter-email"></div>
+        </div>
+      </div>
+
+      <table class="items">
+        <thead>
+          <tr><th>Description</th><th class="num">Qty</th><th class="num">Unit price</th><th class="num">Total</th></tr>
+        </thead>
+        <tbody class="items-body"></tbody>
+      </table>
+
+      <div class="totals"><span class="grand r-total"></span></div>
+
+      <div class="notes r-notes"></div>
+
+      <div class="signatures">
+        <div class="signature">
+          <div class="line"></div>
+          <div class="label issuer-sig-label"></div>
+        </div>
+        <div class="signature">
+          <div class="line"></div>
+          <div class="label counter-sig-label"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script src="storage.js"></script>
+<script src="calc.js"></script>
+<script src="pwa.js"></script>
+<script src="receipt-view.js"></script>
+</body>
+</html>
